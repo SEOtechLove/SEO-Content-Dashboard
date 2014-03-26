@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>SEO Content Dashboard | <%= yield(:title) %></title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body id="<%= @body_id %>">
+<% if user_signed_in? %>	
+<%= render 'layouts/header' %>
+
+   <div id="page-wrapper">
+	  <div class="row">
+		<div id="alert">
+		 	   <% if notice %>
+		 	     <p class="alert alert-notice"><%= notice %></p>
+		 	   <% end %>
+		 	   <% if alert %>
+		 	     <p class="alert alert-error"><%= alert %></p>
+		 	   <% end %>
+		</div>
+	   	<%= yield %>
+		</div>
+   </div>
+   <% else %>	
+   <div id="page-wrapper">
+	   <div class="row">
+		<div id="alert">
+		 	   <% if notice %>
+		 	     <p class="alert alert-notice"><%= notice %></p>
+		 	   <% end %>
+		 	   <% if alert %>
+		 	     <p class="alert alert-error"><%= alert %></p>
+		 	   <% end %>
+		</div>
+	   	<%= yield %>
+   </div>
+   </div>
+   <% end %>
+<%= render 'layouts/footer' %>
+</body>
+</html>
