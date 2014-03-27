@@ -31,7 +31,34 @@
 	#page-wrapper #alert{padding-top: 10px;margin-left:5px;margin-right:5px;}
 }
   
+.dropdown-menu .divider {
+height: 1px;
+margin: 9px 1px;
+overflow: hidden;
+background-color: #e5e5e5;
+border-bottom: none;
+}
+.navbar .nav > li > .dropdown-menu:before {
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    content: none;
+    display: none;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
 
+.navbar .nav > li > .dropdown-menu:after {
+    border-bottom: none;
+    border-left: none;
+    border-right:none;
+    content: none;
+    display: none;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
 
 .navbar-static-side ul li {
     border-bottom: 1px solid #e7e7e7;

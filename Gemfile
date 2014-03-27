@@ -9,20 +9,21 @@ gem 'sqlite3'
 # Nokogiri for scraping
 gem 'nokogiri'
 
-
+gem 'mysql2'
 
 # Twitter Bootstrap
 gem "therubyracer"
 gem "less-rails"
 gem 'twitter-bootstrap-rails'
 
-# JQuery
+#Whenever for Cronjobs
+gem 'whenever', :require => false
 
+# JQuery
 gem 'jquery-easing-rails'
 gem 'jquery-ui-rails'
 
 # bCript
-
 gem 'bcrypt-ruby'
 
 # JQuery Datatables
