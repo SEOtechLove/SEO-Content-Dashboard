@@ -257,6 +257,8 @@ border-bottom: none;
    */
 }
 
+.footer{padding-left:5px;}
+
 /* Flot Chart Containers */
 
  .flot-chart {

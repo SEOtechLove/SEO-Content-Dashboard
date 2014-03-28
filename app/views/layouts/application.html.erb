@@ -23,7 +23,9 @@
 		</div>
 	   	<%= yield %>
 		</div>
+		<%= render 'layouts/footer' %>
    </div>
+   
    <% else %>	
    <div id="page-wrapper">
 	   <div class="row">
@@ -37,8 +39,9 @@
 		</div>
 	   	<%= yield %>
    </div>
+   <%= render 'layouts/footer' %>
    </div>
    <% end %>
-<%= render 'layouts/footer' %>
+
 </body>
 </html>

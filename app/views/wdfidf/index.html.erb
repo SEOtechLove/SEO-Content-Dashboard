@@ -1,0 +1,10 @@
+<%= form_tag do %>
+ <%= text_field_tag(:keyword) %>
+ <%= submit_tag("Perform") %>
+<% end %>
+
+<% if @view %>
+  <%= @view.each do |serp| %>
+  	<p><%= serp.inspect %></p>
+  <% end %>
+<% end %>

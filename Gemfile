@@ -36,6 +36,15 @@ gem 'raphael-rails'
 # Devise
 gem 'devise'
 
+#Memcache Dalli
+gem 'dalli'
+
+gem 'thin'
+
+#pry alternative debugger
+gem 'pry', :group => :development
+gem 'pry-debugger'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
 

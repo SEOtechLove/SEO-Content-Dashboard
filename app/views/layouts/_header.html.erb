@@ -50,10 +50,10 @@
 					<ul class="nav" id="side-menu">
 											<% if user_signed_in? %> 
 											<li>
-						                        <%= link_to "/dashboard" do %><i class="fa fa-dashboard fa-fw"></i> Dashboard<% end %>
+						                        <%= link_to dashboard_index_path do %><i class="fa fa-dashboard fa-fw"></i> Dashboard<% end %>
 						                    </li>
 						                    <li>
-						                        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> WDF*IDF Analysis<span class="fa arrow"></span></a>
+						                        <%= link_to analyze_path do %><i class="fa fa-bar-chart-o fa-fw"></i> WDF*IDF Analysis<span class="fa arrow"></span><% end %>
 			
 						                    </li>
 											<% else %><%end%>

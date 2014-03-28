@@ -1,12 +1,15 @@
 Seocontentdashboard::Application.routes.draw do
-  resources :dashboard
-  
+  root :to => "home#index"
   
   get "dashboard/index"
   devise_for :models
   get "home/index"
   devise_for :users
-  root :to => "home#index"
+  
+  get 'analyze' => 'wdfidf#index', :as => 'analyze'
+  post 'analyze' => 'wdfidf#analyze'
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
