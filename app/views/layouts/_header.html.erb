@@ -48,16 +48,23 @@
 			<nav class="navbar-default navbar-static-side" role="navigation"> 
 				<div class="sidebar-collapse">
 					<ul class="nav" id="side-menu">
-											<% if user_signed_in? %> 
-											<li>
-						                        <%= link_to dashboard_index_path do %><i class="fa fa-dashboard fa-fw"></i> Dashboard<% end %>
-						                    </li>
-						                    <li>
-						                        <%= link_to analyze_path do %><i class="fa fa-bar-chart-o fa-fw"></i> WDF*IDF Analysis<span class="fa arrow"></span><% end %>
-			
-						                    </li>
-											<% else %><%end%>
-						
+						            <% if user_signed_in? %> 
+							          <li>
+						               <%= link_to dashboard_index_path do %><i class="fa fa-dashboard fa-fw"></i> Dashboard<% end %>
+						             </li>
+						             <li>
+						               <%= link_to analyze_path do %><i class="fa fa-bar-chart-o fa-fw"></i> WDF*IDF Analysis
+                            <span class="fa arrow"></span>
+                            <% end %>
+		                      </li>
+                          <!-- /.nav-second-level -->
+                          <li>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                          </li>
+                           <li>
+                             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
+                           </li>
+					                 <% else %><%end%>		
 					</ul>
 					<!-- /#side-menu -->	
 				</div>

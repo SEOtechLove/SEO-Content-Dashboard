@@ -1004,6 +1004,6 @@ class ApplicationController < ActionController::Base
 "überdies" ,
 "übermorgen" ,
 "übrig" ,
-"übrigens" , "ums", "the", "for", "of", "an", "über", "er", "sie", "es", "mittlerweile", "weiterlesen"]
+"übrigens" , "ums", "the", "for", "of", "an", "über", "er", "sie", "es", "mittlerweile", "weiterlesen", "Über", "de", "en", "com", "org", "www", "co", "fr", "ca"]
    
 end

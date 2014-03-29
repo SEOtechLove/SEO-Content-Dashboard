@@ -3,12 +3,8 @@ require 'open-uri'
 class WdfidfController < ApplicationController
   
   def index
-    
   end
-  
-  def url
-    @url = params[:url]
-  end
+ 
   
   def analyze
     keyword = params[:keyword]
@@ -19,15 +15,31 @@ class WdfidfController < ApplicationController
       @view << analyze_content(content)
     end
     serp_amount = get_serp_amount(keyword)
-    render :index
+    render :index  
     
-  end
+  end 
+  
+ 
+  
   
   private
   
   def analyze_content(content)
-    #zählen der wörter
-    #content
+    # Ermitteln der Häufigkeit jedes Terms aus einem Dokument
+    # Rückgabe (term,anzahl)
+    term = content[:result_text]
+    term_counts = term.group_by{|i| i}.map{|k,v| [k, v.count] } 
+
+    return{
+      :url_host => content[:url_host],
+      :url => content[:url],
+      :title => content[:title],
+      :title_count => content[:title_count],
+      :description => content[:description], 
+      :description_count => content[:description_count],
+      :term_count_in_text_and_amount => term_counts,
+      :count => content[:count]
+    }
   end
   
   def get_title(doc)
@@ -46,7 +58,7 @@ class WdfidfController < ApplicationController
     doc.css('script').remove
     doc.xpath("//@*[starts-with(name(),'on')]").remove
    
-    #Auslesen Meta-Tags
+    #Auslesen Meta-Tags und Länge
     title = get_title(doc)
     title_count = title.length
     description = get_description(doc) 
@@ -63,7 +75,7 @@ class WdfidfController < ApplicationController
     #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm
     #Bereinigte Wortliste
     result_text = text - config.STOPWORDS
-   
+    
     #Anzahl Wörter
     count = result_text.count
     
@@ -104,17 +116,17 @@ class WdfidfController < ApplicationController
     return :serp_amount
   end
   
- # def get_wdf(url, keyword, freq, l)
-  #  wdf = log2(freq + 1) /  log2(l)
-   # return wdf
-#  end
+  def get_wdf(url, keyword, freq, l)
+     wdf = log2(freq + 1) /  log2(l)
+     return wdf
+  end
   
- # def get_idf(url, keyword, nd, ni)
-  #  idf = log10(1 + nd / ni)
-   # return idf
-  #end
+  def get_idf(url, keyword, nd, ni)
+     idf = log10(1 + nd / ni)
+     return idf
+  end
   
-  #def get_wdf_idf(wdf , idf)
-   # return wdf*idf
-  #end
+  def get_wdf_idf(wdf , idf)
+     return wdf*idf
+  end
 end

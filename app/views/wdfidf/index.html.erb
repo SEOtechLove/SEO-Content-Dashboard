@@ -1,34 +1,45 @@
-<%= form_tag do %>
- <%= text_field_tag(:keyword) %>
- <%= submit_tag("Analyze") %>
-<% end %>
-
-
- <% if @view %>
-<div class="table-responsive">
-<table class="table-hover">
-  <tr>
-    <th>Position</th>
-    <th>URL</th>
-    <th>URL-Host</th>
-    <th>Words</th>
-    <th>Title</th>
-    <th>Description</th>
-  </tr>
-  <%= @view.each do |serp| %>
-  <tr>
-    <td></td>
-    <td><%= puts @url.to_s %></td>
-    <td><%= :url_host  %></td>
-    <td><%= :count  %></td>
-    <td><%= :title%></td>
-    <td><%= :description%></td>
-  </tr>
-    <% end %>
-  <% end %>
-</table>
+<% provide(:title, 'WDF*IDF Aanalysis') %>
+<% @body_id = "wdf-idf" %>
+<div class="col-lg-12">
+  <h1 class="page-header">WDF*IDF Analysis</h1>
 </div>
+	 	<div class="col-md-5 col-md-offset-0">
+      
+      <%= form_tag do %>
+        <%= text_field_tag(:keyword, "Enter your keyword", disabled: false ) %>
+        <%= submit_tag("Analyze") %>
+      <% end %>
+      
+      <% if @view %>
+        <div class="table-responsive">
+          <table class="table-hover">
+            <thead>
+            <tr>
+              <th>Position</th>
+              <th>URL</th>
+              <th>URL-Host</th>
+              <th>Words</th>
+              <th>Title</th>
+              <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%= @view.each do |serp| %>
+            <tr>
+              <td><%=  %></td>
+              <td><%= %></td>
+              <td><%= :url_host  %></td>
+              <td><%= :count  %></td>
+              <td><%= :title%></td>
+              <td><%= :description%></td>
+            </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+      
 
  
-
+    </div>
      
