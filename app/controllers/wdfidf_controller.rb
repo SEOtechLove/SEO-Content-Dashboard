@@ -1,8 +1,13 @@
 require 'open-uri'
 
 class WdfidfController < ApplicationController
+  
   def index
     
+  end
+  
+  def url
+    @url = params[:url]
   end
   
   def analyze
@@ -21,7 +26,16 @@ class WdfidfController < ApplicationController
   private
   
   def analyze_content(content)
-    content
+    #zählen der wörter
+    #content
+  end
+  
+  def get_title(doc)
+    return doc.xpath('//html/head/title').text 
+  end
+  
+  def get_description(doc)
+    return doc.xpath('//head/meta[@name = "description"]/@content').text 
   end
   
   def get_content(url)
@@ -33,21 +47,19 @@ class WdfidfController < ApplicationController
     doc.xpath("//@*[starts-with(name(),'on')]").remove
    
     #Auslesen Meta-Tags
-    title = doc.xpath('//html/head/title').text 
+    title = get_title(doc)
     title_count = title.length
-    description = doc.xpath('//head/meta[@name = "description"]/@content').text 
+    description = get_description(doc) 
     description_count = description.length
    
     #Auslesen des body-Tags und umwandlung in kleinbuchstaben
     html = doc.at('body').inner_text.downcase + title.downcase + description.downcase
    
     # String mit nur Termen aus Buchstaben  
-    #text  = html.scan(/\p{alnum}[a-zA-Z-]+/) 
-  
+    #text  = html.scan(/\p{alnum}[a-zA-Z-]+/)  
     # String mit allen Termen
     #text = html.scan(/\p{Alnum}+/)
-    text = html.scan(/\p{alpha}+|\d+(?:[\.\-\/]\d+)*/)
-   
+    text = html.scan(/\p{alpha}+|\d+(?:[\.\-\/]\d+)*/) 
     #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm
     #Bereinigte Wortliste
     result_text = text - config.STOPWORDS
@@ -89,12 +101,20 @@ class WdfidfController < ApplicationController
     results_number = doc.xpath('//div[@id="resultStats"]').text
     results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     serp_amount = results_number.scan(/\d+/).join("").to_i
-    return serp_amount
+    return :serp_amount
   end
   
-  def get_term_count() 
+ # def get_wdf(url, keyword, freq, l)
+  #  wdf = log2(freq + 1) /  log2(l)
+   # return wdf
+#  end
   
-  end
+ # def get_idf(url, keyword, nd, ni)
+  #  idf = log10(1 + nd / ni)
+   # return idf
+  #end
   
-  
+  #def get_wdf_idf(wdf , idf)
+   # return wdf*idf
+  #end
 end
