@@ -9,7 +9,6 @@
         <%= text_field_tag(:keyword, "Enter your keyword", disabled: false ) %>
         <%= submit_tag("Analyze") %>
       <% end %>
-      
       <% if @view %>
         <div class="table-responsive">
           <table class="table-hover">
@@ -26,8 +25,8 @@
             <tbody>
             <%= @view.each do |serp| %>
             <tr>
-              <td><%=  %></td>
-              <td><%= :url %></td>
+              <td><%= %></td>
+              <td><%=  :url %></td>
               <td><%= :url_host  %></td>
               <td><%= :count %></td>
               <td><%= :title%></td>

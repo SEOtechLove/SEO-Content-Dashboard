@@ -30,13 +30,16 @@ class WdfidfController < ApplicationController
     term_counts = term.group_by{|i| i}.map{|k,v| [k, v.count] } 
     term_counts_min = filter_terms(term_counts, 3)
 
-    # Wdf pro Term Berechnen
+    # Wdf pro Term berechnen
     # Rückgabe (term,wdf)
     count = content[:count]
-    wdf_term = term_counts_min.map {|k, v| get_wdf(k, v, count) }
+    wdf_term = term_counts_min.map {|k, v| get_wdf(k, v, count) } 
     
-    # IDF pro Term Berechnen
+    # IDF pro Term berechnen
+    idf_term = term_counts_min.map {|k, v| get_idf(k) }
     
+    # WDF * IDF Berechnung
+    #wdf_idf = idf_term.map
     
     return{
      # :url_host => content[:url_host],
@@ -47,6 +50,8 @@ class WdfidfController < ApplicationController
     #  :description_count => content[:description_count],
        :term_count_filtered => term_counts_min,
        :wdf_term => wdf_term,
+       :idf_term => idf_term,
+       #:wdf_idf => wdf_idf
        :count=> content[:count]
     }
   end
@@ -55,18 +60,6 @@ class WdfidfController < ApplicationController
     #Filtert alle Terme, die weniger als min_amount vorkommen
    term_counts_min = term_counts.delete_if{|k,v| v < min_amount}
    return term_counts_min
-  end
-  
-  def get_number_term_in_urls(keyword)
-    #Zählt die URLs, die das Keyword enthalten (ni)
-    
-    
-    
-    
-    return{
-      :count_urls => count_urls 
-      
-    }
   end
   
   def get_title(doc)
@@ -119,6 +112,7 @@ class WdfidfController < ApplicationController
   def scrape_serps(keyword)
     #Scrapen der Suchergebnisse von Google
     url_list = []
+    # Bei Eingabe von Umlauten nach Google Abfrage ändern
     doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{keyword}"))
     doc.xpath('//*[contains(concat( " ", @class, " " ), concat( " ", "r", " " ))]//a/@href').each do |i|
       result = i.inner_text
@@ -134,29 +128,50 @@ class WdfidfController < ApplicationController
     return url_list
   end
 
+  def get_keyword_out_umlauts_google(keyword)
+     # Bei Eingabe von Umlauten nach Google Abfrage ändern
+    keyword.gsub!('ä', '%C3%A4')
+    keyword.gsub!('ö', '%C3%B6')
+    keyword.gsub!('ü', 'C3%BC')
+    keyword.gsub!('ß', '%C3%9F')
+    
+    return keyword
+  end
+  
   def get_serp_amount(keyword)
-    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{keyword}"))
+    tmp_keyword = keyword.dup
+    tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
+    #Delay, um Google IP-Ban vorzubeugen
+    #prng = Random.new()
+    #random = prng.rand(0.5..1.5) 
+    #random = random.round(1)
+    #sleep(random)
+    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}"))
     results_number = doc.xpath('//div[@id="resultStats"]').text
     results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     serp_amount = results_number.scan(/\d+/).join("").to_i
-   # serp_amount_keyword = {serp_amount
-    return :serp_amount => serp_amount# :serp_amount_keyword => serp_amount_keyword 
+    return serp_amount
   end
   
-  def get_wdf(keyword, freq, l)
+  def get_wdf(wdf_keyword, freq, l)
      wdf = ((Math.log((freq + 1), 2)) /  (Math.log(l,2)))
      wdf = wdf.round(4)
-     wdf_keyword = keyword
      return {
       :wdf_keyword => wdf_keyword, 
-      :wdf => wdf}
+      :wdf => wdf
+    }
   end
   
-  def get_idf(keyword, nd, ni)
-     #ni = 
-     nd = content[:serp_amount]
-     idf = Math.log(1 + nd / ni, 10)
-     return {keyword => keyword, idf => idf}
+  def get_idf(idf_keyword)
+    
+     nd = get_serp_amount(idf_keyword)
+     ni = 6
+     number =  (nd) / (ni)
+     idf = Math.log(1 + number, 10)
+     return {
+       :idf_keyword => idf_keyword, 
+       :idf => idf
+     }
   end
   
 end
