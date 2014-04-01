@@ -1,15 +1,5 @@
-require 'yaml'
-
-class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-  
-   before_action :authenticate_user!
    
-   #Stopwords in Yaml Datei auslagern und einlesen
-    #config.STOPWORDS = YAML::load(File.open("#{RAILS_ROOT}/config/stopwords.yml"))
-   config.STOPWORDS =["ab" ,
+   ["ab" ,
      "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "impressum", "login", "weiterlesen","title", 
 "description","startseite","angesichts", "auschließlich", 
 "am", 
@@ -1009,4 +999,3 @@ class ApplicationController < ActionController::Base
 "übrig" ,
 "übrigens" , "ums", "the", "for", "of", "an", "über", "er", "sie", "es", "mittlerweile", "weiterlesen", "Über", "de", "en", "com", "org", "www", "co", "fr", "ca"]
    
-end

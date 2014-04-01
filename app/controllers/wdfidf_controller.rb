@@ -1,6 +1,5 @@
 require 'open-uri'
 
-
 class WdfidfController < ApplicationController
   
   def index
@@ -42,12 +41,12 @@ class WdfidfController < ApplicationController
     #wdf_idf = idf_term.map
     
     return{
-     # :url_host => content[:url_host],
+       :url_host => content[:url_host],
        :url => content[:url],
        :title => content[:title],
-    #  :title_count => content[:title_count],
+       :title_count => content[:title_count],
        :description => content[:description], 
-    #  :description_count => content[:description_count],
+       :description_count => content[:description_count],
        :term_count_filtered => term_counts_min,
        :wdf_term => wdf_term,
        :idf_term => idf_term,
@@ -71,7 +70,7 @@ class WdfidfController < ApplicationController
   end
   
   def get_content(url)
-    doc = Nokogiri::HTML(open(url ,"User-Agent" => "Ruby/#{RUBY_VERSION}"))
+    doc = Nokogiri::HTML(open(url))
     uri = URI("#{url}")
     url_host = uri.host
    
@@ -110,10 +109,12 @@ class WdfidfController < ApplicationController
   end 
 
   def scrape_serps(keyword)
+    tmp_keyword = keyword.dup
+    tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
     #Scrapen der Suchergebnisse von Google
     url_list = []
     # Bei Eingabe von Umlauten nach Google Abfrage ändern
-    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{keyword}"))
+    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}"))
     doc.xpath('//*[contains(concat( " ", @class, " " ), concat( " ", "r", " " ))]//a/@href').each do |i|
       result = i.inner_text
       if result.include?("/url?q=")
@@ -142,14 +143,15 @@ class WdfidfController < ApplicationController
     tmp_keyword = keyword.dup
     tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
     #Delay, um Google IP-Ban vorzubeugen
-    #prng = Random.new()
-    #random = prng.rand(0.5..1.5) 
-    #random = random.round(1)
-    #sleep(random)
-    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}"))
-    results_number = doc.xpath('//div[@id="resultStats"]').text
-    results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-    serp_amount = results_number.scan(/\d+/).join("").to_i
+   # prng = Random.new()
+   # random = prng.rand(0.5..1.5) 
+   # random = random.round(1)
+   # sleep(random)
+  #  doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}","User-Agent" => "Ruby/#{RUBY_VERSION}"))
+   # results_number = doc.xpath('//div[@id="resultStats"]').text
+    #results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    #serp_amount = results_number.scan(/\d+/).join("").to_i
+    serp_amount = 450000
     return serp_amount
   end
   
