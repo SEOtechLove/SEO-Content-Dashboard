@@ -26,6 +26,9 @@ gem 'jquery-ui-rails'
 # bCript
 gem 'bcrypt-ruby'
 
+#Javascript in Rails: Gon
+gem 'gon'
+
 # JQuery Datatables
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
