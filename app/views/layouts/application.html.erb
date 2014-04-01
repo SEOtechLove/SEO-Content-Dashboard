@@ -12,6 +12,7 @@
 <%= render 'layouts/header' %>
 
    <div id="page-wrapper">
+     <div class="row">
 		<div id="alert">
 		 	   <% if notice %>
 		 	     <p class="alert alert-notice"><%= notice %></p>
@@ -20,6 +21,7 @@
 		 	     <p class="alert alert-error"><%= alert %></p>
 		 	   <% end %>
 		</div>
+  </div>
 	   	<%= yield %>
       </div>
       <!-- /#page-wrapper -->
