@@ -49,24 +49,23 @@
 				<div class="sidebar-collapse">
 					<ul class="nav" id="side-menu">
 						            <% if user_signed_in? %> 
-							          <li>
-						               <%= link_to dashboard_index_path do %><i class="fa fa-dashboard fa-fw"></i> Dashboard<% end %>
-						             </li>
 						             <li>
 						               <%= link_to analyze_path do %><i class="fa fa-bar-chart-o fa-fw"></i> WDF*IDF Analysis
                             <span class="fa arrow"></span>
                             <% end %>
 		                      </li>
-                          <!-- /.nav-second-level -->
+                             <% if @view %>
+                          <!-- /.nav-second-level 
                           <ul class="nav nav-second-level">
                           
                           <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            <a href="#name=top-ten-results"><i class="fa fa-table fa-fw"></i>Top-Ten</a>
                           </li>
                            <li>
-                             <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
+                             <a href="#name=top-ten-meta"><i class="fa fa-table fa-fw"></i>Top-Ten</a>
                            </li>
-                         </ul>
+                         </ul>-->
+                        <%end%>	
 					                 <% else %><%end%>		
 					</ul>
 					<!-- /#side-menu -->	

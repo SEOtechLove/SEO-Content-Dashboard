@@ -14,7 +14,7 @@
     width: 100%;
 }
 
-a {
+.navbar a {
     color: #428BCA !important;
     text-decoration: none;
 }
@@ -35,7 +35,9 @@ a {
     }
 	#page-wrapper #alert{padding-top: 10px;margin-left:5px;margin-right:5px;}
 }
-  
+
+.jumbotron h1{padding-bottom:20px !important;}
+ 
 .dropdown-menu .divider {
 height: 1px;
 margin: 9px 1px;

@@ -28,18 +28,19 @@ class WdfidfController < ApplicationController
     term = content[:result_text]
     term_counts = term.group_by{|i| i}.map{|k,v| [k, v.count] } 
     term_counts_min = filter_terms(term_counts, 3)
-
     # Wdf pro Term berechnen
     # Rückgabe (term,wdf)
     count = content[:count]
-    wdf_term = term_counts_min.map {|k, v| get_wdf(k, v, count) } 
+    wdf = term_counts_min.map {|k, v| get_wdf(k, v, count) } 
     
+    term = term_counts_min.map{|k,v| k } 
+    amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
-    idf_term = term_counts_min.map {|k, v| get_idf(k) }
-    
+    idf = term_counts_min.map {|k, v| get_idf(k) }
+
     # WDF * IDF Berechnung
     #wdf_idf = idf_term.map
-    
+    binding.pry
     return{
        :url_host => content[:url_host],
        :url => content[:url],
@@ -48,12 +49,31 @@ class WdfidfController < ApplicationController
        :description => content[:description], 
        :description_count => content[:description_count],
        :term_count_filtered => term_counts_min,
-       :wdf_term => wdf_term,
-       :idf_term => idf_term,
+       :wdf => wdf,
+       :idf => idf,
+       :term => term,
+       :amount => amount,
        #:wdf_idf => wdf_idf
        :count=> content[:count]
     }
   end
+  
+  def all_wdf_idf_per_term
+    
+  end
+  
+  
+  def max_wdf_idf
+  
+  
+  end
+  
+  def intersection_wdf_idf
+    
+  end
+    
+    
+  
   
   def filter_terms(term_counts, min_amount)
     #Filtert alle Terme, die weniger als min_amount vorkommen
@@ -88,8 +108,8 @@ class WdfidfController < ApplicationController
     #Auslesen des body-Tags und Umwandlung in Kleinbuchstaben
     html = doc.at('body').inner_text.downcase + title.downcase + description.downcase
    
-    # String mit allen gefundenen Termen  
-    text = html.scan(/\p{alpha}+|\d+(?:[\.\-\/]\d+)*/) 
+    # String mit allen gefundenen Termen 
+    text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
     
     #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste: #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
     result_text = text - config.STOPWORDS
@@ -159,7 +179,8 @@ class WdfidfController < ApplicationController
      wdf = ((Math.log((freq + 1), 2)) /  (Math.log(l,2)))
      wdf = wdf.round(4)
      return {
-      :wdf_keyword => wdf_keyword, 
+      #:wdf_keyword => wdf_keyword, 
+      
       :wdf => wdf
     }
   end
@@ -171,9 +192,13 @@ class WdfidfController < ApplicationController
      number =  (nd) / (ni)
      idf = Math.log(1 + number, 10)
      return {
-       :idf_keyword => idf_keyword, 
+     #  :idf_keyword => idf_keyword, 
        :idf => idf
      }
+  end
+  
+  def get_wdf_idf()
+    
   end
   
 end
