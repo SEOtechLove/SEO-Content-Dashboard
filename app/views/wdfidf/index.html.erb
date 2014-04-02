@@ -118,18 +118,17 @@
                                             <th>WDF*IDF</th>
                                           </tr>
                                           </thead>
-                                          <tbody>
-                                            <% @view.each_with_index do |serp, index| %>
-<%puts serp%>                              
+      
+                                            <% [:term].each_with_index do |i|%>
                                           <tr>
-                                            <td><%= serp[:term].first%></td>
-                                            <td><%= serp[:amount].first%></td>
-                                            <td><%= serp[:wdf].first%></td>
-                                            <td><%= serp[:idf].first%></td>
-                                            
-                                               <% end %>                                  
+                                            <%binding.pry%>
+                                                <td><%= serp[:term]%></td>
+                                                <td><%= serp[:amount].first %></td>
+                                                <td><%= serp[:wdf]%></td>
+                                                <td><%= serp[:idf] %></td>
+                                       
                                           </tr>
-                                          
+                                              <% end %>
                                           </tbody>
                                         </table>
                                         

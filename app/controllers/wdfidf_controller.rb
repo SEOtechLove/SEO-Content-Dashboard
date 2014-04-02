@@ -15,6 +15,7 @@ class WdfidfController < ApplicationController
       content = get_content(url)
       @view << analyze_content(content)
     end
+    puts @view
     render :index
     
   end 
@@ -32,15 +33,15 @@ class WdfidfController < ApplicationController
     # Rückgabe (term,wdf)
     count = content[:count]
     wdf = term_counts_min.map {|k, v| get_wdf(k, v, count) } 
-    
+
+    puts wdf
     term = term_counts_min.map{|k,v| k } 
     amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
     idf = term_counts_min.map {|k, v| get_idf(k) }
-
     # WDF * IDF Berechnung
     #wdf_idf = idf_term.map
-    binding.pry
+    
     return{
        :url_host => content[:url_host],
        :url => content[:url],
@@ -58,22 +59,24 @@ class WdfidfController < ApplicationController
     }
   end
   
-  def all_wdf_idf_per_term
+  def all_wdf_idf_per_term()
     
   end
   
   
-  def max_wdf_idf
+  def max_wdf_idf()
   
   
   end
   
-  def intersection_wdf_idf
+  def intersection_wdf_idf()
     
   end
     
     
-  
+  def get_ni(term)
+    
+  end
   
   def filter_terms(term_counts, min_amount)
     #Filtert alle Terme, die weniger als min_amount vorkommen
@@ -177,12 +180,9 @@ class WdfidfController < ApplicationController
   
   def get_wdf(wdf_keyword, freq, l)
      wdf = ((Math.log((freq + 1), 2)) /  (Math.log(l,2)))
-     wdf = wdf.round(4)
-     return {
-      #:wdf_keyword => wdf_keyword, 
-      
-      :wdf => wdf
-    }
+     wdf = wdf.round(4)   
+     return wdf
+  
   end
   
   def get_idf(idf_keyword)
@@ -191,10 +191,9 @@ class WdfidfController < ApplicationController
      ni = 6
      number =  (nd) / (ni)
      idf = Math.log(1 + number, 10)
-     return {
-     #  :idf_keyword => idf_keyword, 
-       :idf => idf
-     }
+     idf = idf.round(4)  
+     return idf
+     
   end
   
   def get_wdf_idf()
