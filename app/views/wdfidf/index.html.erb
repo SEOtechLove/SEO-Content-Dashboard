@@ -19,6 +19,7 @@
                   <% end %>
             </div>                    
    </div>
+ <br />
     <% if @view %>
     
     
@@ -97,6 +98,23 @@
              </div>
        </div>
        
+       <div class="row">  
+            <div class="col-lg-12">
+                  <div class="panel panel-default">
+                             <div class="panel-heading">
+                                 WDF*IDF-Diagram Overview
+                             </div>
+                     
+                             <div class="panel-body">
+                                 
+                                </div>
+                           
+                             
+                        </div>
+                      
+               </div>
+         </div>
+       
      
       <% @view.each_with_index do |serp, index| %>
      <div class="row">  
@@ -121,8 +139,7 @@
       
                                             <% [:term].each_with_index do |i|%>
                                           <tr>
-                                            <%binding.pry%>
-                                                <td><%= serp[:term]%></td>
+                                                <td><%= serp[:term] %></td>
                                                 <td><%= serp[:amount].first %></td>
                                                 <td><%= serp[:wdf]%></td>
                                                 <td><%= serp[:idf] %></td>

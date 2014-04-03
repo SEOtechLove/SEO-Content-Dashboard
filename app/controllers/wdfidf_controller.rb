@@ -10,12 +10,15 @@ class WdfidfController < ApplicationController
   def analyze
     keyword = params[:keyword]
     @view = []
+    @view2 = []
+    all_terms = []
     serps = scrape_serps(keyword)
     serps.each do |url|
       content = get_content(url)
-      @view << analyze_content(content)
+      @view << analyze_content(content, all_terms)
+      @view2 << calculate_content(content)
     end
-    puts @view
+    
     render :index
     
   end 
@@ -23,7 +26,32 @@ class WdfidfController < ApplicationController
 
   private
   
-  def analyze_content(content)
+  def calculate_content(content)
+    all_terms = content[:all_terms]
+    
+   # ni = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
+    puts "#{all_terms}"
+   # all_wdf_idf_per_term()
+   # max_wdf_idf()
+   # intersection_wdf_idf()
+    
+    
+    # WDF * IDF Berechnung
+    #wdf_idf = idf_term.map
+    
+    return{
+      #:ni => ni
+      #:wdf_idf => wdf_idf
+    }
+  end
+  
+  def get_all_term(term, all_terms)
+    all_terms = all_terms.concat(term).flatten
+    return all_terms
+  end
+  
+  
+  def analyze_content(content, all_terms)
     # Ermitteln der Häufigkeit jedes Terms aus einem Dokument
     # Rückgabe (term,anzahl)
     term = content[:result_text]
@@ -32,15 +60,18 @@ class WdfidfController < ApplicationController
     # Wdf pro Term berechnen
     # Rückgabe (term,wdf)
     count = content[:count]
-    wdf = term_counts_min.map {|k, v| get_wdf(k, v, count) } 
+    wdf = term_counts_min.map{|k, v| get_wdf(k, v, count) } 
 
-    puts wdf
-    term = term_counts_min.map{|k,v| k } 
+    term = term_counts_min.map{|k,v| k }  
+   
+    # Alle Terme zusammenfassen und Dublikate zählen
+    all_terms = get_all_term(term, all_terms)
+    
+   
+    
     amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
     idf = term_counts_min.map {|k, v| get_idf(k) }
-    # WDF * IDF Berechnung
-    #wdf_idf = idf_term.map
     
     return{
        :url_host => content[:url_host],
@@ -53,8 +84,8 @@ class WdfidfController < ApplicationController
        :wdf => wdf,
        :idf => idf,
        :term => term,
-       :amount => amount,
-       #:wdf_idf => wdf_idf
+       :all_terms => all_terms,
+       :amount => amount,    
        :count=> content[:count]
     }
   end
@@ -74,9 +105,6 @@ class WdfidfController < ApplicationController
   end
     
     
-  def get_ni(term)
-    
-  end
   
   def filter_terms(term_counts, min_amount)
     #Filtert alle Terme, die weniger als min_amount vorkommen
@@ -186,9 +214,8 @@ class WdfidfController < ApplicationController
   end
   
   def get_idf(idf_keyword)
-    
+    ni = 6
      nd = get_serp_amount(idf_keyword)
-     ni = 6
      number =  (nd) / (ni)
      idf = Math.log(1 + number, 10)
      idf = idf.round(4)  
