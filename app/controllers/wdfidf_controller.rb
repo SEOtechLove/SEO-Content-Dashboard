@@ -10,15 +10,14 @@ class WdfidfController < ApplicationController
   def analyze
     keyword = params[:keyword]
     @view = []
-    @view2 = []
     all_terms = []
     serps = scrape_serps(keyword)
     serps.each do |url|
       content = get_content(url)
       @view << analyze_content(content, all_terms)
-      @view2 << calculate_content(content)
     end
-    
+    @results = @view
+    calculate_content()
     render :index
     
   end 
@@ -26,11 +25,19 @@ class WdfidfController < ApplicationController
 
   private
   
-  def calculate_content(content)
-    all_terms = content[:all_terms]
+  def calculate_content()
+    puts "#{@results}"
+     
+     # results.each_with_index do |serp, index|
+     #   ni = results[:count]
+      #end
+     #@results.each_with_index do |all_terms, index|
+      #  ni = params[:all_terms][index]
+      #  puts "ni: #{ni}"
+    #  end
+    #ni = content[:ni]
     
-   # ni = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
-    puts "#{all_terms}"
+   
    # all_wdf_idf_per_term()
    # max_wdf_idf()
    # intersection_wdf_idf()
@@ -66,9 +73,7 @@ class WdfidfController < ApplicationController
    
     # Alle Terme zusammenfassen und Dublikate zählen
     all_terms = get_all_term(term, all_terms)
-    
-   
-    
+    all_terms = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
     amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
     idf = term_counts_min.map {|k, v| get_idf(k) }
@@ -125,17 +130,23 @@ class WdfidfController < ApplicationController
     uri = URI("#{url}")
     url_host = uri.host
    
+   
+   
     # Javascript entfernen
     doc.css('script').remove
     doc.xpath("//@*[starts-with(name(),'on')]").remove
    
+    puts "doc: #{doc}"
     #Auslesen der Meta-Tags und Anzahl der Zeichen inklusive Leerzeichen
     title = get_title(doc)
+
     title_count = title.length
+
     
     description = get_description(doc) 
     description_count = description.length
-   
+     
+    puts "title #{title}"
     #Auslesen des body-Tags und Umwandlung in Kleinbuchstaben
     html = doc.at('body').inner_text.downcase + title.downcase + description.downcase
    
