@@ -10,14 +10,14 @@ class WdfidfController < ApplicationController
   def analyze
     keyword = params[:keyword]
     @view = []
-    all_terms = []
+    @all_terms = []
     serps = scrape_serps(keyword)
     serps.each do |url|
       content = get_content(url)
-      @view << analyze_content(content, all_terms)
+      @view << analyze_content(content,@all_terms)
     end
-    @results = @view
-    calculate_content()
+    @all_terms = @view 
+    calculate_content(@all_terms)
     render :index
     
   end 
@@ -25,9 +25,10 @@ class WdfidfController < ApplicationController
 
   private
   
-  def calculate_content()
-    puts "#{@results}"
+  def calculate_content(all_terms)
+    puts "#{@all_terms}"
      
+    
      # results.each_with_index do |serp, index|
      #   ni = results[:count]
       #end
@@ -69,7 +70,7 @@ class WdfidfController < ApplicationController
     count = content[:count]
     wdf = term_counts_min.map{|k, v| get_wdf(k, v, count) } 
 
-    term = term_counts_min.map{|k,v| k }  
+    term = term_counts_min.map{|k,v| k } 
    
     # Alle Terme zusammenfassen und Dublikate zählen
     all_terms = get_all_term(term, all_terms)
@@ -136,7 +137,7 @@ class WdfidfController < ApplicationController
     doc.css('script').remove
     doc.xpath("//@*[starts-with(name(),'on')]").remove
    
-    puts "doc: #{doc}"
+    #puts "doc: #{doc}"
     #Auslesen der Meta-Tags und Anzahl der Zeichen inklusive Leerzeichen
     title = get_title(doc)
 
@@ -145,8 +146,7 @@ class WdfidfController < ApplicationController
     
     description = get_description(doc) 
     description_count = description.length
-     
-    puts "title #{title}"
+
     #Auslesen des body-Tags und Umwandlung in Kleinbuchstaben
     html = doc.at('body').inner_text.downcase + title.downcase + description.downcase
    

@@ -116,7 +116,8 @@
          </div>
        
      
-      <% @view.each_with_index do |serp, index| %>
+      <% @view.each do |serp| %>
+
      <div class="row">  
           <div class="col-lg-12">
                 <div class="panel panel-default">
@@ -136,17 +137,18 @@
                                             <th>WDF*IDF</th>
                                           </tr>
                                           </thead>
-      
-                                            <% [:term].each_with_index do |i|%>
+
+                                            <% serp[:term].length.times do |i|%>
+                                            
                                           <tr>
-                                                <td><%= serp[:term] %></td>
-                                                <td><%= serp[:amount].first %></td>
-                                                <td><%= serp[:wdf]%></td>
-                                                <td><%= serp[:idf] %></td>
-                                                 <td><%= serp[:all_terms] %></td>
+                                                <td><%= serp[:term][i]%></td>
+                                                <td><%= serp[:amount][i] %></td>
+                                                <td><%= serp[:wdf][i]%></td>
+                                                <td><%= serp[:idf][i] %></td>
                                        
                                           </tr>
-                                              <% end %>
+                                           <% end %>
+                  
                                           </tbody>
                                         </table>
                                         
@@ -175,4 +177,7 @@
                </div>
          </div>
        <% end %>
-      <% end %>   
+       
+     
+        
+  <% end %>   
