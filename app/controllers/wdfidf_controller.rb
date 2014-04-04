@@ -26,7 +26,7 @@ class WdfidfController < ApplicationController
   private
   
   def calculate_content(all_terms)
-    puts "#{@all_terms}"
+    #puts "#{@all_terms}"
      
     
      # results.each_with_index do |serp, index|
@@ -58,22 +58,24 @@ class WdfidfController < ApplicationController
     return all_terms
   end
   
-  
+
   def analyze_content(content, all_terms)
     # Ermitteln der Häufigkeit jedes Terms aus einem Dokument
     # Rückgabe (term,anzahl)
     term = content[:result_text]
     term_counts = term.group_by{|i| i}.map{|k,v| [k, v.count] } 
-    term_counts_min = filter_terms(term_counts, 3)
+    term_counts_min = filter_terms(term_counts, 2)
     # Wdf pro Term berechnen
     # Rückgabe (term,wdf)
     count = content[:count]
     wdf = term_counts_min.map{|k, v| get_wdf(k, v, count) } 
 
-    term = term_counts_min.map{|k,v| k } 
-   
+    terms = term_counts_min.map{|k,v| k } 
+    gon.term = term
+    gon.wdf = wdf
+    
     # Alle Terme zusammenfassen und Dublikate zählen
-    all_terms = get_all_term(term, all_terms)
+    all_terms = get_all_term(terms, all_terms)
     all_terms = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
     amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
@@ -89,7 +91,7 @@ class WdfidfController < ApplicationController
        :term_count_filtered => term_counts_min,
        :wdf => wdf,
        :idf => idf,
-       :term => term,
+       :term => terms,
        :all_terms => all_terms,
        :amount => amount,    
        :count=> content[:count]
