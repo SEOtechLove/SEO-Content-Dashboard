@@ -11,18 +11,10 @@
                     <%= text_field_tag(:keyword, nil, :placeholder => "Enter your keyword") %>
                     <%= submit_tag("Analyze", class:'btn btn-success') %>
                   <% end %>
-            </div>  
-            <% if @view %> 
-            <div class="col-md-6">
-                  <%= form_tag do %>
-                    <%= text_field_tag(:own_url, nil, :placeholder => "Enter your URL") %>
-                    <%= submit_tag("Analyze", class:'btn btn-success') %>
-                  <% end %>
-            </div> 
-             <% end %>                   
+            </div>            
    </div>
  <br />
-    <% if @view %>
+    <% if @view_hash %>
     
     
    <div class="row">  
@@ -45,12 +37,12 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <% @view.each_with_index do |serp, index| %>
+                                        <% @view_hash.each do |key, value| %>
                                         <tr>
-                                          <td><%= index+1 %></td>
-                                          <td><%= serp[:url] %></td>
-                                          <td><%= serp[:url_host]  %></td>
-                                          <td><%= serp[:count] %></td>                                      
+                                          <td><%= value['index'] %></td>
+                                          <td><%= value[:url] %></td>
+                                          <td><%= value[:url_host]  %></td>
+                                          <td><%= value[:count] %></td>                                      
                                         </tr>
                                         <% end %>
                                         </tbody>
@@ -82,11 +74,11 @@
                                           </tr>
                                           </thead>
                                           <tbody>
-                                          <% @view.each_with_index do |serp, index| %>
+                                          <% @view_hash.each do |key, value| %>
                                           <tr>
-                                            <td><%= serp[:url] %></td>
-                                            <td><%= serp[:description] %> (<%= serp[:description_count] %>)</td>
-                                            <td><%= serp[:title] %> (<%= serp[:title_count] %>)</td>  
+                                            <td><%= value[:url] %></td>
+                                            <td><%= value[:description] %> (<%= value[:description_count] %>)</td>
+                                            <td><%= value[:title] %> (<%= value[:title_count] %>)</td>  
                                                                          
                                           </tr>
                                           <% end %>
@@ -118,13 +110,13 @@
          </div>
        
      
-      <% @view.each do |serp| %>
+      <% @view_hash.each do |key, value| %>
 
      <div class="row">  
           <div class="col-lg-12">
                 <div class="panel panel-default">
                            <div class="panel-heading">
-                               Result of <%= serp[:url] %>
+                               Result of <%= value[:url] %>
                            </div>
                      
                            <div class="panel-body">
@@ -140,13 +132,13 @@
                                           </tr>
                                           </thead>
 
-                                            <% serp[:term].length.times do |i|%>
+                                            <% value['keywords'].each do |keyword_key, keyword| %>
                                             
                                           <tr>
-                                                <td><%= serp[:term][i]%></td>
-                                                <td><%= serp[:amount][i] %></td>
-                                                <td><%= serp[:wdf][i]%></td>
-                                               
+                                                <td><%= keyword_key %></td>
+                                                <td><%= keyword[:amount] %></td>
+                                                <td><%= keyword[:wdf] %></td>
+                                                <td><%= keyword[:wdf_idf] %></td> 
                                        
                                           </tr>
                                            <% end %>
@@ -166,7 +158,7 @@
             <div class="col-lg-12">
                   <div class="panel panel-default">
                              <div class="panel-heading">
-                                 WDF*IDF-Diagram of <%= serp[:url] %>
+                                 WDF*IDF-Diagram of <%= value[:url] %>
                              </div>
                      
                              <div class="panel-body">

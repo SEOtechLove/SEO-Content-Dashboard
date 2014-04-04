@@ -8,126 +8,98 @@ class WdfidfController < ApplicationController
  
   
   def analyze
-    keyword = params[:keyword]
-    own_url = params[:own_url]
-    puts own_url
-    @view = []
-    all_terms = []
+    keyword = params[:keyword]   
+    @view_hash = {}
+    
     serps = scrape_serps(keyword)
+    keywords_nis = keyword_counter_hash(keyword, serps)
+    
+    index = 1
+    
     serps.each do |url|
-      content = get_content(url)
-      @view << analyze_content(content,all_terms)
+      content_hash = get_content(url)
+      
+      content_hash['keywords'] = analyze_content(content_hash[:result_text], content_hash[:count], keywords_nis)
+      content_hash['index'] = index
+      
+      index = index + 1
+      
+      @view_hash[url.to_s] = content_hash
     end 
-    calculate_content(@view)
 
-    
-    render :index
-    
+    render :index  
   end 
   
-
   private
   
-  def calculate_content(all_content)
-   # puts "#{all_content}"
+  def keyword_counter_hash(keyword, serps)
+    keyword_counter = {}
     
-   #all_content.each |serp, index| 
-   #   all_terms = :all_terms.map
+    serps.each do |url|
+      content = get_content(url)
+      
+      text = content[:result_text]
+      uniq_content = text.uniq
+      keys = keyword_counter.keys
     
- # end
-   # all_content.each_with_index do |serp, index|
-   #   all_terms = :all_terms
-   #   end
-   # end
-   #puts "AllTerms: #{all_terms}"
+      uniq_content.each do |keyword|
+        if keys.include?(keyword)
+          counter = keyword_counter[keyword]
+          keyword_counter[keyword] = counter + 1
+        else
+          keyword_counter[keyword] = 1
+        end
+      end
+    end 
     
-   # term = content[:result_text] 
-     
-    # IDF pro Term berechnen
-   # idf = term_counts_min.map {|k, v| get_idf(k) }
-     # results.each_with_index do |serp, index|
-     #   ni = results[:count]
-      #end
-     #@results.each_with_index do |all_terms, index|
-      #  ni = params[:all_terms][index]
-      #  puts "ni: #{ni}"
-    #  end
-    #ni = content[:ni]
-    
-   
-   # all_wdf_idf_per_term()
-   # max_wdf_idf()
-   # intersection_wdf_idf()
-    
-    
-    # WDF * IDF Berechnung
-    #wdf_idf = idf_term.map
-    
-    return{
-      #:ni => ni
-      #:wdf_idf => wdf_idf
-    }
+    keyword_counter
   end
   
-  def get_all_term(term, all_terms)
-    all_terms = all_terms.concat(term).flatten
-    return all_terms
+  def keyword_count_method(result_hash, content)
+    uniq_content = content.uniq
+    keys = result_hash.keys
+    
+    uniq_content.each do |keyword|
+      if keys.include?(keyword)
+        counter = result_hash[keyword]
+        result_hash[keyword] = counter + 1
+      else
+        result_hash[keyword] = 1
+      end
+    end
+    
+    result_hash
   end
   
-
-  def analyze_content(content, all_terms)
+  def analyze_content(result_text, word_count, keyword_nis)
     # Ermitteln der Häufigkeit jedes Terms aus einem Dokument
     # Rückgabe (term,anzahl)
-    term = content[:result_text]
-    term_counts = term.group_by{|i| i}.map{|k,v| [k, v.count] } 
-    term_counts_min = filter_terms(term_counts, 2)
-    # Wdf pro Term berechnen
-    # Rückgabe (term,wdf)
-    count = content[:count]
-    wdf = term_counts_min.map{|k, v| get_wdf(k, v, count) } 
-
-    terms = term_counts_min.map{|k,v| k } 
-    gon.term = term
-    gon.wdf = wdf
+    term_counts = result_text.group_by{|i| i}.map{|k,v| [k, v.count] } 
     
-    # Alle Terme zusammenfassen und Dublikate zählen
-    all_terms = get_all_term(terms, all_terms)
-    all_terms = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
-    amount = term_counts_min.map{|k,v| v } 
-    # IDF pro Term berechnen
-   # idf = term_counts_min.map {|k, v| get_idf(k) }
+    keyword_hash = {}
     
-    return{
-       :url_host => content[:url_host],
-       :url => content[:url],
-       :title => content[:title],
-       :title_count => content[:title_count],
-       :description => content[:description], 
-       :description_count => content[:description_count],
-       :term_count_filtered => term_counts_min,
-       :wdf => wdf,
-      # :idf => idf,
-       :term => terms,
-       :all_terms => all_terms,
-       :amount => amount,    
-       :count=> content[:count]
-    }
+    term_counts.each do |keyword_array|
+      keyword = keyword_array.first
+      amount = keyword_array.last
+      
+      if amount > 1
+        ni = keyword_nis[keyword]
+      
+        idf = get_idf(keyword, ni)
+        wdf = get_wdf(keyword, amount, word_count)
+      
+        wdf_idf = wdf * idf
+      
+        keyword_hash[keyword] = { 
+          amount: amount,
+          wdf: wdf,
+          wdf_idf: wdf_idf
+        }
+      end
+    end
+  
+    keyword_hash
   end
-  
-  def all_wdf_idf_per_term()
-    
-  end
-  
-  
-  def max_wdf_idf()
-  
-  
-  end
-  
-  def intersection_wdf_idf()
-    
-  end
-    
     
   
   def filter_terms(term_counts, min_amount)
@@ -161,7 +133,6 @@ class WdfidfController < ApplicationController
 
     title_count = title.length
 
-    
     description = get_description(doc) 
     description_count = description.length
 
@@ -176,7 +147,6 @@ class WdfidfController < ApplicationController
     
     #Anzahl Terme innerhalb eines Dokumentes
     count = result_text.count
-    
     return {
       :url_host => url_host,
       :url => url,
@@ -243,16 +213,10 @@ class WdfidfController < ApplicationController
   end
   
   def get_idf(idf_keyword, ni)
-     nd = get_serp_amount(idf_keyword)
-     number =  (nd) / (ni)
-     idf = Math.log(1 + number, 10)
-     idf = idf.round(4)  
-     return idf
-     
+    nd = get_serp_amount(idf_keyword)
+    number =  (nd) / (ni)
+    idf = Math.log(1 + number, 10)
+    idf = idf.round(4)  
+    return idf 
   end
-  
-  def get_wdf_idf()
-    
-  end
-  
 end
