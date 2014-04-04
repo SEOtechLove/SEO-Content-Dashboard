@@ -11,13 +11,15 @@
                     <%= text_field_tag(:keyword, nil, :placeholder => "Enter your keyword") %>
                     <%= submit_tag("Analyze", class:'btn btn-success') %>
                   <% end %>
-            </div>   
+            </div>  
+            <% if @view %> 
             <div class="col-md-6">
                   <%= form_tag do %>
-                    <%= text_field_tag(:keyword, nil, :placeholder => "Enter your URL") %>
+                    <%= text_field_tag(:own_url, nil, :placeholder => "Enter your URL") %>
                     <%= submit_tag("Analyze", class:'btn btn-success') %>
                   <% end %>
-            </div>                    
+            </div> 
+             <% end %>                   
    </div>
  <br />
     <% if @view %>
@@ -144,7 +146,7 @@
                                                 <td><%= serp[:term][i]%></td>
                                                 <td><%= serp[:amount][i] %></td>
                                                 <td><%= serp[:wdf][i]%></td>
-                                                <td><%= serp[:idf][i] %></td>
+                                               
                                        
                                           </tr>
                                            <% end %>

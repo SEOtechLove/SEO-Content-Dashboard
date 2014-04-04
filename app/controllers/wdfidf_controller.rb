@@ -9,15 +9,18 @@ class WdfidfController < ApplicationController
   
   def analyze
     keyword = params[:keyword]
+    own_url = params[:own_url]
+    puts own_url
     @view = []
-    @all_terms = []
+    all_terms = []
     serps = scrape_serps(keyword)
     serps.each do |url|
       content = get_content(url)
-      @view << analyze_content(content,@all_terms)
-    end
-    @all_terms = @view 
-    calculate_content(@all_terms)
+      @view << analyze_content(content,all_terms)
+    end 
+    calculate_content(@view)
+
+    
     render :index
     
   end 
@@ -25,10 +28,23 @@ class WdfidfController < ApplicationController
 
   private
   
-  def calculate_content(all_terms)
-    #puts "#{@all_terms}"
-     
+  def calculate_content(all_content)
+   # puts "#{all_content}"
     
+   #all_content.each |serp, index| 
+   #   all_terms = :all_terms.map
+    
+ # end
+   # all_content.each_with_index do |serp, index|
+   #   all_terms = :all_terms
+   #   end
+   # end
+   #puts "AllTerms: #{all_terms}"
+    
+   # term = content[:result_text] 
+     
+    # IDF pro Term berechnen
+   # idf = term_counts_min.map {|k, v| get_idf(k) }
      # results.each_with_index do |serp, index|
      #   ni = results[:count]
       #end
@@ -79,7 +95,7 @@ class WdfidfController < ApplicationController
     all_terms = all_terms.group_by{|i| i}.map{|k,v| [k, v.count] }
     amount = term_counts_min.map{|k,v| v } 
     # IDF pro Term berechnen
-    idf = term_counts_min.map {|k, v| get_idf(k) }
+   # idf = term_counts_min.map {|k, v| get_idf(k) }
     
     return{
        :url_host => content[:url_host],
@@ -90,7 +106,7 @@ class WdfidfController < ApplicationController
        :description_count => content[:description_count],
        :term_count_filtered => term_counts_min,
        :wdf => wdf,
-       :idf => idf,
+      # :idf => idf,
        :term => terms,
        :all_terms => all_terms,
        :amount => amount,    
@@ -226,8 +242,7 @@ class WdfidfController < ApplicationController
   
   end
   
-  def get_idf(idf_keyword)
-    ni = 6
+  def get_idf(idf_keyword, ni)
      nd = get_serp_amount(idf_keyword)
      number =  (nd) / (ni)
      idf = Math.log(1 + number, 10)
