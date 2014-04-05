@@ -10,8 +10,9 @@ class WdfidfController < ApplicationController
   def analyze
     keyword = params[:keyword]   
     @view_hash = {}
-    
+    keyword_hash = {}
     serps = scrape_serps(keyword)
+    #Berechnung des ni pro Keyword - Anzahl der Urls, die das Keyword verwenden
     keywords_nis = keyword_counter_hash(keyword, serps)
     
     index = 1
@@ -22,16 +23,119 @@ class WdfidfController < ApplicationController
       content_hash['keywords'] = analyze_content(content_hash[:result_text], content_hash[:count], keywords_nis)
       content_hash['index'] = index
       
-      index = index + 1
+      keyword = content_hash['keywords'].keys
       
+      gon_ausgabe(index, keyword_hash)
+   
+      index = index + 1
       @view_hash[url.to_s] = content_hash
     end 
-
+    
+    index = 1
+    
     render :index  
   end 
   
   private
   
+  def gon_ausgabe(index, keyword)
+    case index
+    when 1
+      gon.term_1 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_1
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_1 = array
+    when 2
+      gon.term_1 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_2
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_2 = array
+    when 3
+      gon.term_3 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_3
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_3 = array
+    when 4
+      gon.term_4 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_4
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_4 = array
+    when 5
+      gon.term_5 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_5
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_5 = array
+    when 6
+      gon.term_6 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_6
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_6 = array
+    when 7
+      gon.term_7 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_7
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_7 = array
+    when 8
+      gon.term_8 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_8
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_8 = array
+    when 9
+      gon.term_9 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_9
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_9 = array
+    when 10
+      gon.term_10 = keyword
+      #Gon Dateien für Anzeige anpassen
+      array =  []
+      my_array = gon.term_10
+      my_array.each_slice(1) do |value|
+         array << {:keyword => value[0]}
+      end 
+      gon.term_10 = array    
+    else
+         
+    end
+         binding.pry
+  end
+ 
   def keyword_counter_hash(keyword, serps)
     keyword_counter = {}
     
@@ -55,22 +159,6 @@ class WdfidfController < ApplicationController
     keyword_counter
   end
   
-  def keyword_count_method(result_hash, content)
-    uniq_content = content.uniq
-    keys = result_hash.keys
-    
-    uniq_content.each do |keyword|
-      if keys.include?(keyword)
-        counter = result_hash[keyword]
-        result_hash[keyword] = counter + 1
-      else
-        result_hash[keyword] = 1
-      end
-    end
-    
-    result_hash
-  end
-  
   def analyze_content(result_text, word_count, keyword_nis)
     # Ermitteln der Häufigkeit jedes Terms aus einem Dokument
     # Rückgabe (term,anzahl)
@@ -89,7 +177,8 @@ class WdfidfController < ApplicationController
         wdf = get_wdf(keyword, amount, word_count)
       
         wdf_idf = wdf * idf
-      
+        wdf_idf = wdf_idf.round(4) 
+        
         keyword_hash[keyword] = { 
           amount: amount,
           wdf: wdf,
@@ -99,13 +188,6 @@ class WdfidfController < ApplicationController
     end
   
     keyword_hash
-  end
-    
-  
-  def filter_terms(term_counts, min_amount)
-    #Filtert alle Terme, die weniger als min_amount vorkommen
-   term_counts_min = term_counts.delete_if{|k,v| v < min_amount}
-   return term_counts_min
   end
   
   def get_title(doc)
@@ -119,15 +201,12 @@ class WdfidfController < ApplicationController
   def get_content(url)
     doc = Nokogiri::HTML(open(url))
     uri = URI("#{url}")
-    url_host = uri.host
-   
-   
-   
+    url_host = uri.host 
+    
     # Javascript entfernen
     doc.css('script').remove
     doc.xpath("//@*[starts-with(name(),'on')]").remove
-   
-    #puts "doc: #{doc}"
+
     #Auslesen der Meta-Tags und Anzahl der Zeichen inklusive Leerzeichen
     title = get_title(doc)
 
@@ -137,25 +216,30 @@ class WdfidfController < ApplicationController
     description_count = description.length
 
     #Auslesen des body-Tags und Umwandlung in Kleinbuchstaben
-    html = doc.at('body').inner_text.downcase + title.downcase + description.downcase
-   
-    # String mit allen gefundenen Termen 
-    text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
+    html = doc.at('body').inner_text
+    if html.empty?
+      redirect_to root_url, alert: "You're stuck here!"
+    else
+      html = html.downcase + title.downcase + description.downcase
+      
+      # String mit allen gefundenen Termen 
+      text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
     
-    #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste: #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
-    result_text = text - config.STOPWORDS
+      #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste: #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
+      result_text = text - config.STOPWORDS
     
-    #Anzahl Terme innerhalb eines Dokumentes
-    count = result_text.count
-    return {
-      :url_host => url_host,
-      :url => url,
-      :title => title,
-      :title_count => title_count,
-      :description => description,
-      :description_count => description_count,
-      :result_text => result_text,
-      :count => count}
+      #Anzahl Terme innerhalb eines Dokumentes
+      count = result_text.count
+      return {
+        :url_host => url_host,
+        :url => url,
+        :title => title,
+        :title_count => title_count,
+        :description => description,
+        :description_count => description_count,
+        :result_text => result_text,
+        :count => count}
+    end
   end 
 
   def scrape_serps(keyword)
@@ -176,7 +260,7 @@ class WdfidfController < ApplicationController
       url_list << result
     end
       url_list.compact! 
-    return url_list
+      url_list
   end
 
   def get_keyword_out_umlauts_google(keyword)
@@ -185,38 +269,35 @@ class WdfidfController < ApplicationController
     keyword.gsub!('ö', '%C3%B6')
     keyword.gsub!('ü', 'C3%BC')
     keyword.gsub!('ß', '%C3%9F')
-    
-    return keyword
+    keyword.gsub!('Ä', '%C3%84')
+    keyword.gsub!('Ö', '%C3%96')
+    keyword.gsub!('Ü', '%C3%9')
+    keyword
   end
   
   def get_serp_amount(keyword)
     tmp_keyword = keyword.dup
     tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
-    #Delay, um Google IP-Ban vorzubeugen
-   # prng = Random.new()
-   # random = prng.rand(0.5..1.5) 
-   # random = random.round(1)
-   # sleep(random)
-  #  doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}","User-Agent" => "Ruby/#{RUBY_VERSION}"))
-   # results_number = doc.xpath('//div[@id="resultStats"]').text
-    #results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-    #serp_amount = results_number.scan(/\d+/).join("").to_i
-    serp_amount = 450000
-    return serp_amount
+    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}","User-Agent" => "Ruby/#{RUBY_VERSION}"))
+    results_number = doc.xpath('//div[@id="resultStats"]').text
+    results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    serp_amount = results_number.scan(/\d+/).join("").to_i
+    serp_amount
   end
   
   def get_wdf(wdf_keyword, freq, l)
      wdf = ((Math.log((freq + 1), 2)) /  (Math.log(l,2)))
      wdf = wdf.round(4)   
-     return wdf
+     wdf
   
   end
   
   def get_idf(idf_keyword, ni)
-    nd = get_serp_amount(idf_keyword)
+    # nd = get_serp_amount(idf_keyword)
+    nd = 4500000
     number =  (nd) / (ni)
     idf = Math.log(1 + number, 10)
     idf = idf.round(4)  
-    return idf 
+    idf 
   end
 end

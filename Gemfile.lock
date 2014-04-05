@@ -99,7 +99,6 @@ GEM
     morrisjs-rails (0.5.0)
       railties (> 3.1, < 5)
     multi_json (1.9.2)
-    mysql2 (0.3.15)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
@@ -199,7 +198,6 @@ DEPENDENCIES
   jquery-ui-rails
   less-rails
   morrisjs-rails
-  mysql2
   nokogiri
   pry
   pry-debugger

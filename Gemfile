@@ -10,8 +10,6 @@ gem 'sqlite3'
 # Nokogiri for scraping
 gem 'nokogiri'
 
-gem 'mysql2'
-
 # Twitter Bootstrap
 gem "therubyracer"
 gem "less-rails"

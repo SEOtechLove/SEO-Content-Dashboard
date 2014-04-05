@@ -8,20 +8,18 @@
   <div class="row">    
             <div class="col-md-6">
                   <%= form_tag do %>
-                    <%= text_field_tag(:keyword, nil, :placeholder => "Enter your keyword") %>
+                    <%= text_field_tag(:keyword, params[:keyword], :placeholder => "Enter your keyword") %>
                     <%= submit_tag("Analyze", class:'btn btn-success') %>
                   <% end %>
             </div>            
    </div>
  <br />
     <% if @view_hash %>
-    
-    
    <div class="row">  
         <div class="col-lg-12">
               <div class="panel panel-default">
                          <div class="panel-heading" name="top-ten-results" id="top-ten-results">
-                             Top-Ten Results
+                             Top-Ten results for <%= params[:keyword]  %>
                          </div>
                      
                          <div class="panel-body">
@@ -59,7 +57,7 @@
           <div class="col-lg-12">
                 <div class="panel panel-default">
                            <div class="panel-heading" name="top-ten-meta" id="top-ten-meta">
-                               Meta-Tags Top-Ten
+                               Meta-Tags Top-Ten for <%= params[:keyword]  %>
                            </div>
                      
                            <div class="panel-body">
@@ -91,27 +89,9 @@
                       
              </div>
        </div>
-       
-       <div class="row">  
-            <div class="col-lg-12">
-                  <div class="panel panel-default">
-                             <div class="panel-heading">
-                                 WDF*IDF-Diagram Overview
-                             </div>
-                     
-                             <div class="panel-body">
-                                 
-                                </div>
-                           
-                             
-                        </div>
-                      
-               </div>
-         </div>
-       
-     
+      <%= i = 0 %> 
       <% @view_hash.each do |key, value| %>
-
+      <% i = i + 1 %>
      <div class="row">  
           <div class="col-lg-12">
                 <div class="panel panel-default">
@@ -162,7 +142,7 @@
                              </div>
                      
                              <div class="panel-body">
-                                <div id="graph" style="height: 500px;"></div>
+                                <div id="graph<%=i%>" style="height: 500px;"></div>
                                 
                                 </div>
                            
