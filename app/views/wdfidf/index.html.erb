@@ -67,17 +67,16 @@
                                          <thead>
                                           <tr>
                                             <th>URL</th>
-                                            <th>Description</th>
                                             <th>Title</th>
+                                            <th>Description</th>
                                           </tr>
                                           </thead>
                                           <tbody>
                                           <% @view_hash.each do |key, value| %>
                                           <tr>
                                             <td><%= value[:url] %></td>
-                                            <td><%= value[:description] %> (<%= value[:description_count] %>)</td>
                                             <td><%= value[:title] %> (<%= value[:title_count] %>)</td>  
-                                                                         
+                                             <td><%= value[:description] %> (<%=value[:description_count] %>)</td>                            
                                           </tr>
                                           <% end %>
                                           </tbody>

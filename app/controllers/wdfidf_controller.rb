@@ -18,14 +18,14 @@ class WdfidfController < ApplicationController
     index = 1
     
     serps.each do |url|
-      content_hash = get_content(url)
+    content_hash = get_content(url)
       
-      content_hash['keywords'] = analyze_content(content_hash[:result_text], content_hash[:count], keywords_nis)
-      content_hash['index'] = index
+    content_hash['keywords'] = analyze_content(content_hash[:result_text], content_hash[:count], keywords_nis)
+    content_hash['index'] = index
       
-      gon_ausgabe(index, content_hash['keywords'])
+    gon_ausgabe(index, content_hash['keywords'])
    
-      index = index + 1
+    index = index + 1
       @view_hash[url.to_s] = content_hash
     end 
     
@@ -222,21 +222,19 @@ class WdfidfController < ApplicationController
     description_count = description.length
 
     #Auslesen des body-Tags und Umwandlung in Kleinbuchstaben
+   
     html = doc.at('body').inner_text
-    if html.empty?
-      redirect_to root_url, alert: "You're stuck here!"
-    else
-      html = html.downcase + title.downcase + description.downcase
+    html = html.downcase + title.downcase + description.downcase
       
-      # String mit allen gefundenen Termen 
-      text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
+    # String mit allen gefundenen Termen 
+    text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
     
-      #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste:                   
-      #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
-      result_text = text - config.STOPWORDS
+    #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste:                   
+    #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
+    result_text = text - config.STOPWORDS
     
-      #Anzahl Terme innerhalb eines Dokumentes
-      count = result_text.count 
+    #Anzahl Terme innerhalb eines Dokumentes
+    count = result_text.count 
       return {
         :url_host => url_host,
         :url => url,
@@ -246,7 +244,7 @@ class WdfidfController < ApplicationController
         :description_count => description_count,
         :result_text => result_text,
         :count => count}
-    end
+
   end 
 
   def scrape_serps(keyword)
@@ -281,18 +279,6 @@ class WdfidfController < ApplicationController
     keyword.gsub!('Ü', '%C3%9')
     keyword
   end
-  
-  def get_serp_amount(keyword)
-    tmp_keyword = keyword.dup
-    tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
-    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}","User-Agent" => "Ruby/#{RUBY_VERSION}"))
-    results_number = doc.xpath('//div[@id="resultStats"]').text
-    results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-    serp_amount = results_number.scan(/\d+/).join("").to_i
-    serp_amount
-  end
-  
-  
   
   def get_serp_amount(keyword)
     tmp_keyword = keyword.dup
