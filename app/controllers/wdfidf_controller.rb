@@ -299,6 +299,7 @@ class WdfidfController < ApplicationController
   
   def get_idf(idf_keyword, ni)
    # nd = get_serp_amount(idf_keyword)
+   #zu
     nd = 450000
     number =  (nd) / (ni)
     idf = Math.log(1 + number, 10)
