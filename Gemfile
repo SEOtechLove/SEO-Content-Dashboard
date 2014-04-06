@@ -7,42 +7,30 @@ gem 'rails', '4.0.4'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
-# Nokogiri for scraping
-gem 'nokogiri'
-
-# Twitter Bootstrap
 gem "therubyracer"
 gem "less-rails"
-gem 'twitter-bootstrap-rails'
 
-#Whenever for Cronjobs
-gem 'whenever', :require => false
 
-# JQuery
-gem 'jquery-easing-rails'
+gem 'nokogiri'                # Nokogiri for scraping
+gem 'twitter-bootstrap-rails' # Twitter Bootstrap
+gem 'jquery-easing-rails'     # JQuery
 gem 'jquery-ui-rails'
+gem 'gon'                     #Javascript in Rails: Gon
+gem 'morrisjs-rails'          # Grafische Library: Morris.js & Raphael.js Javascript 
+gem 'raphael-rails'
+gem 'dalli'                   #Memcache Speicherung mit Hilfe von £Dalli
 
-# bCript
-gem 'bcrypt-ruby'
-
-#Javascript in Rails: Gon
-gem 'gon'
 
 # JQuery Datatables
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
-# Morris Javascript
-gem 'morrisjs-rails'
-gem 'raphael-rails'
+# bCript
+gem 'bcrypt-ruby'
 
 # Devise
 gem 'devise'
 
-#Memcache Dalli
-gem 'dalli'
-
 gem 'thin'
-
 
 #pry alternative debugger
 gem 'pry', :group => :development
@@ -56,9 +44,6 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
-
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

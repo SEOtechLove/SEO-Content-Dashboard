@@ -3,15 +3,7 @@
 <head>
    <title>SEO Content Dashboard | <%= yield(:title) %></title>
    <%= include_gon(:init => true) %> 
-   <script> 
 
-    var json_data = [
-  {keyword: "kontakt", wdf_idf: 0.2},
-  {keyword: "anfahrt", wdf_idf: 0.2},
-  {keyword: "aktuelles", wdf_idf: 0.2},
-  {keyword: "heizung", wdf_idf: 0.2}]
-
-   </script>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>

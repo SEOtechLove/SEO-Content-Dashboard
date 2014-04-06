@@ -23,9 +23,7 @@ class WdfidfController < ApplicationController
       content_hash['keywords'] = analyze_content(content_hash[:result_text], content_hash[:count], keywords_nis)
       content_hash['index'] = index
       
-      keyword = content_hash['keywords'].keys
-      
-      gon_ausgabe(index, keyword_hash)
+      gon_ausgabe(index, content_hash['keywords'])
    
       index = index + 1
       @view_hash[url.to_s] = content_hash
@@ -38,102 +36,110 @@ class WdfidfController < ApplicationController
   
   private
   
-  def gon_ausgabe(index, keyword)
+  def gon_ausgabe(index, keyword_hash)
     case index
     when 1
-      gon.term_1 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_1
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_1 = array
     when 2
-      gon.term_1 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_2
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
+      
       gon.term_2 = array
     when 3
-      gon.term_3 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_3
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_3 = array
     when 4
-      gon.term_4 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_4
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_4 = array
     when 5
-      gon.term_5 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_5
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_5 = array
     when 6
-      gon.term_6 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_6
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_6 = array
     when 7
-      gon.term_7 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_7
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_7 = array
     when 8
-      gon.term_8 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_8
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_8 = array
     when 9
-      gon.term_9 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_9
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
       gon.term_9 = array
     when 10
-      gon.term_10 = keyword
-      #Gon Dateien für Anzeige anpassen
       array =  []
-      my_array = gon.term_10
-      my_array.each_slice(1) do |value|
-         array << {:keyword => value[0]}
-      end 
-      gon.term_10 = array    
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
+      gon.term_10 = array
+    when 11
+      array =  []
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
+      gon.term_11 = array  
+    when 12
+      array =  []
+      #Gon Dateien für Anzeige anpassen
+      keyword_hash = keyword_hash.sort_by {|k, v| v[:wdf_idf]}.reverse
+      keyword_hash.each do |index, value|
+        array << {keyword: index, wdf_idf: value[:wdf_idf]}
+      end
+      gon.term_12 = array
+      
     else
          
     end
-         binding.pry
+      
   end
  
   def keyword_counter_hash(keyword, serps)
@@ -225,11 +231,12 @@ class WdfidfController < ApplicationController
       # String mit allen gefundenen Termen 
       text = html.scan(/\p{Alpha}+|\d+(?:[\.\-\/]\d+)*/) 
     
-      #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste: #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
+      #Terme mit Hilfe von Stopwort-Liste bereinigen (Stopwords-Liste:                   
+      #http://solariz.de/de/downloads/6/german_enhanced_stopwords.htm + eigene)
       result_text = text - config.STOPWORDS
     
       #Anzahl Terme innerhalb eines Dokumentes
-      count = result_text.count
+      count = result_text.count 
       return {
         :url_host => url_host,
         :url => url,
@@ -285,6 +292,18 @@ class WdfidfController < ApplicationController
     serp_amount
   end
   
+  
+  
+  def get_serp_amount(keyword)
+    tmp_keyword = keyword.dup
+    tmp_keyword = get_keyword_out_umlauts_google(tmp_keyword)
+    doc = Nokogiri::HTML(open("https://www.google.de/search?q=#{tmp_keyword}","User-Agent" => "Ruby/#{RUBY_VERSION}"))
+    results_number = doc.xpath('//div[@id="resultStats"]').text
+    results_number.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    serp_amount = results_number.scan(/\d+/).join("").to_i
+    serp_amount
+  end
+  
   def get_wdf(wdf_keyword, freq, l)
      wdf = ((Math.log((freq + 1), 2)) /  (Math.log(l,2)))
      wdf = wdf.round(4)   
@@ -293,8 +312,8 @@ class WdfidfController < ApplicationController
   end
   
   def get_idf(idf_keyword, ni)
-    # nd = get_serp_amount(idf_keyword)
-    nd = 4500000
+   # nd = get_serp_amount(idf_keyword)
+    nd = 450000
     number =  (nd) / (ni)
     idf = Math.log(1 + number, 10)
     idf = idf.round(4)  
